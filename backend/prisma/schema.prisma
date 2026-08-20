@@ -85,6 +85,7 @@ model Currency {
   historical HistoricalRate[]
   news       News[]
   events     EconomicEvent[]
+  forecasts  ForecastSnapshot[]
 }
 
 model Source {
@@ -242,4 +243,36 @@ model ProcessingLog {
 
   @@index([messageId, createdAt])
   @@map("processing_logs")
+}
+
+model DataImport {
+  id              String   @id @default(cuid())
+  fileName        String
+  fileType        String
+  datasetType     String
+  status          String
+  recordsImported Int      @default(0)
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ForecastSnapshot {
+  id              String   @id @default(cuid())
+  currencyCode    String
+  horizonHours    Int
+  currentRate     Decimal
+  predictedRate   Decimal
+  lowerBound      Decimal
+  upperBound      Decimal
+  confidenceLabel String
+  modelVersion    String
+  featureCount    Int
+  dataPoints      Int
+  generatedAt     DateTime @default(now())
+  metadata        Json?
+
+  currency Currency @relation(fields: [currencyCode], references: [code])
+
+  @@index([currencyCode, horizonHours, generatedAt])
 }

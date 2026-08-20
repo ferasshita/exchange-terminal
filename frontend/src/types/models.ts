@@ -81,6 +81,76 @@ export interface ExchangeOffice {
   verified: boolean;
 }
 
+export interface DataImport {
+  id: string;
+  fileName: string;
+  fileType: string;
+  datasetType: string;
+  status: string;
+  recordsImported: number;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ForecastSnapshot {
+  id: string;
+  currencyCode: string;
+  horizonHours: number;
+  currentRate: string;
+  predictedRate: string;
+  lowerBound: string;
+  upperBound: string;
+  confidenceLabel: string;
+  modelVersion: string;
+  featureCount: number;
+  dataPoints: number;
+  generatedAt: string;
+  currency?: Currency;
+  metadata?: Record<string, unknown>;
+}
+
+export interface WhatsAppSource {
+  id: string;
+  integrationId: string;
+  name: string;
+  description?: string;
+  type: 'EXCHANGE_RATES' | 'NEWS' | 'GOLD_PRICES' | 'ECONOMIC_EVENTS';
+  active: boolean;
+  priority: number;
+  createdAt: string;
+}
+
+export interface WhatsAppMessage {
+  id: string;
+  integrationId: string;
+  sourceId?: string;
+  sender: string;
+  messageId: string;
+  messageText: string;
+  receivedAt: string;
+  processed: boolean;
+  parseStatus: 'PENDING' | 'PARSED' | 'FAILED' | 'REVIEW' | 'APPROVED' | 'REJECTED';
+  confidence: number;
+  source?: WhatsAppSource;
+}
+
+export interface WhatsAppIntegration {
+  id: string;
+  userId: string;
+  name: string;
+  businessAccountId: string;
+  phoneNumberId: string;
+  encryptedAccessToken: string;
+  verifyToken: string;
+  status: 'DISCONNECTED' | 'CONNECTED' | 'FAILED' | 'WAITING';
+  lastSync?: string;
+  createdAt: string;
+  updatedAt: string;
+  sources?: WhatsAppSource[];
+  _count?: { messages: number };
+}
+
 export interface PaginatedResponse<T> {
   items: T[];
   total: number;

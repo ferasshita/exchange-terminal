@@ -1,14 +1,19 @@
 import { api } from './client';
 import type {
   Currency,
+  DataImport,
   EconomicEvent,
   ExchangeOffice,
   ExchangeRate,
+  ForecastSnapshot,
   HistoricalRate,
   News,
   PaginatedResponse,
   Source,
   User,
+  WhatsAppIntegration,
+  WhatsAppMessage,
+  WhatsAppSource,
 } from '../types/models';
 
 export interface LoginPayload {
@@ -72,5 +77,51 @@ export const dataService = {
     setRole: (id: string, role: User['role']) => api.patch(`/users/${id}/role`, { role }),
     setStatus: (id: string, isActive: boolean) => api.patch(`/users/${id}/status`, { isActive }),
   },
+  imports: {
+    list: (params: Record<string, unknown> = {}) => api.get<PaginatedResponse<DataImport>>('/imports', asParams(params)),
+    create: (payload: {
+      fileName: string;
+      content: string;
+      datasetType?: 'AUTO' | 'RATES' | 'NEWS';
+      sourceName?: string;
+      retrainAfterImport?: boolean;
+    }) => api.post('/imports', payload),
+  },
+  forecasts: {
+    list: () => api.get<{ items: ForecastSnapshot[] }>('/forecasts'),
+    retrain: () => api.post<{ items: ForecastSnapshot[]; modelVersion: string }>('/forecasts/retrain'),
+  },
+  whatsapp: {
+    listIntegrations: (params: Record<string, unknown> = {}) =>
+      api.get<PaginatedResponse<WhatsAppIntegration>>('/whatsapp/integrations', asParams(params)),
+    createIntegration: (payload: {
+      name: string;
+      businessAccountId?: string;
+      phoneNumberId?: string;
+      encryptedAccessToken?: string;
+    }) => api.post('/whatsapp/integrations', payload),
+    createSource: (
+      integrationId: string,
+      payload: {
+        name: string;
+        description?: string;
+        type: WhatsAppSource['type'];
+        priority?: number;
+        active?: boolean;
+      },
+    ) => api.post(`/whatsapp/integrations/${integrationId}/sources`, payload),
+    listMessages: (integrationId: string, params: Record<string, unknown> = {}) =>
+      api.get<PaginatedResponse<WhatsAppMessage>>(`/whatsapp/integrations/${integrationId}/messages`, asParams(params)),
+  },
   search: (q: string) => api.get('/search', { params: { q } }),
+};
+
+export const publicService = {
+  dashboard: () =>
+    api.get<{
+      generatedAt: string | null;
+      predictions: ForecastSnapshot[];
+      historicalRates: HistoricalRate[];
+      liveRates: ExchangeRate[];
+    }>('/public/dashboard'),
 };
