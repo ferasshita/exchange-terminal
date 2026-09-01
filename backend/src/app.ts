@@ -14,9 +14,12 @@ import exchangeOfficesRoutes from './routes/exchange-offices';
 import exchangeRatesRoutes from './routes/exchange-rates';
 import historicalRatesRoutes from './routes/historical-rates';
 import newsRoutes from './routes/news';
+import forecastingRoutes from './routes/forecasting';
+import publicDashboardRoutes from './routes/public-dashboard';
 import searchRoutes from './routes/search';
 import sourcesRoutes from './routes/sources';
 import usersRoutes from './routes/users';
+import whatsappRoutes from './routes/whatsapp';
 
 const app = express();
 const authLimiter = rateLimit({
@@ -43,6 +46,7 @@ app.get('/health', (_req, res) => {
 });
 
 app.use('/auth', authLimiter, authRoutes);
+app.use('/public', protectedLimiter, publicDashboardRoutes);
 
 const adminWriteGuard = [auth, (req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (req.method === 'GET') {
@@ -61,6 +65,8 @@ app.use('/economic-events', protectedLimiter, ...adminWriteGuard, economicEvents
 app.use('/exchange-offices', protectedLimiter, ...adminWriteGuard, exchangeOfficesRoutes);
 app.use('/search', protectedLimiter, auth, searchRoutes);
 app.use('/users', protectedLimiter, auth, authorize('ADMIN'), usersRoutes);
+app.use('/whatsapp', protectedLimiter, auth, whatsappRoutes);
+app.use('/forecasting', protectedLimiter, auth, forecastingRoutes);
 
 app.use(errorHandler);
 

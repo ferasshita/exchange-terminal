@@ -1,4 +1,4 @@
-import { createChart, ColorType, CandlestickSeries, LineSeries } from 'lightweight-charts';
+import { createChart, ColorType, CandlestickSeries, LineSeries, type UTCTimestamp } from 'lightweight-charts';
 import { useEffect, useMemo, useRef } from 'react';
 
 import type { HistoricalRate } from '../../types/models';
@@ -45,7 +45,7 @@ export const RateChart = ({ rows, mode }: Props) => {
 
     if (mode === 'line') {
       const series = chart.addSeries(LineSeries, { color: '#3b82f6' });
-      series.setData(data.map((point) => ({ time: point.time, value: point.sell })));
+      series.setData(data.map((point) => ({ time: point.time as UTCTimestamp, value: point.sell })));
     } else {
       const series = chart.addSeries(CandlestickSeries, {
         upColor: '#10b981',
@@ -57,7 +57,7 @@ export const RateChart = ({ rows, mode }: Props) => {
       });
       series.setData(
         data.map((point) => ({
-          time: point.time,
+          time: point.time as UTCTimestamp,
           open: point.buy,
           high: Math.max(point.buy, point.sell),
           low: Math.min(point.buy, point.sell),

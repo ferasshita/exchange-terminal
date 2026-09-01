@@ -15,6 +15,7 @@ const navItems = [
   { to: '/economic-calendar', label: 'Economic Calendar', icon: Calendar },
   { to: '/exchange-offices', label: 'Exchange Offices', icon: Store },
   { to: '/analytics', label: 'Analytics', icon: ChartCandlestick },
+  { to: '/ingestion', label: 'Ingestion', icon: Newspaper },
   { to: '/settings', label: 'Settings', icon: Settings },
 ];
 
