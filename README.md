@@ -160,3 +160,56 @@ Current ingestion is manual by admins. The architecture keeps data modules separ
 - WebSocket live updates
 - Public API and mobile clients
 - Notifications and multilingual support
+
+## Forecasting + Ingestion Extensions
+
+This repository now includes:
+
+- `forecast_service/` Python FastAPI microservice for model training/prediction (24h + 48h)
+- Unified ingestion through:
+  - DB tables (`ExchangeRate`, `News`, WhatsApp realtime messages)
+  - CSV/TXT import endpoints
+  - WhatsApp integration/channel config + realtime message ingestion endpoints
+- Public read-only dashboard APIs (no auth required) under `/public/*`
+
+### Forecast service (Python)
+
+```bash
+cd forecast_service
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+### New backend environment variables
+
+```bash
+FORECAST_SERVICE_URL="http://localhost:8000"
+FORECAST_REFRESH_MINUTES="60"
+```
+
+### New backend routes
+
+- Authenticated:
+  - `POST /forecasting/import`
+  - `POST /forecasting/train`
+  - `GET /forecasting/runs`
+  - `GET /forecasting/imports`
+  - `GET /forecasting/predictions/latest`
+  - `GET /forecasting/historical-series`
+  - `GET /forecasting/historical-table`
+  - `GET /whatsapp/integrations`
+  - `POST /whatsapp/integrations`
+  - `POST /whatsapp/integrations/:id/connect`
+  - `POST /whatsapp/integrations/:id/sources`
+  - `POST /whatsapp/messages`
+- Public read-only:
+  - `GET /public/predictions`
+  - `GET /public/historical-series`
+  - `GET /public/historical-table`
+
+### Frontend routes
+
+- Authenticated ingestion/admin page: `/ingestion`
+- Public read-only dashboard: `/public-dashboard`

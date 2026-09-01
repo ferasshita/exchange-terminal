@@ -16,8 +16,8 @@ router.get('/', async (req, res, next) => {
       prisma.currency.findMany({
         where: {
           OR: [
-            { code: { contains: q, mode: 'insensitive' } },
-            { name: { contains: q, mode: 'insensitive' } },
+            { code: { contains: q } },
+            { name: { contains: q } },
           ],
         },
         take: 10,
@@ -25,8 +25,8 @@ router.get('/', async (req, res, next) => {
       prisma.news.findMany({
         where: {
           OR: [
-            { title: { contains: q, mode: 'insensitive' } },
-            { content: { contains: q, mode: 'insensitive' } },
+            { title: { contains: q } },
+            { content: { contains: q } },
           ],
         },
         orderBy: { publishedAt: 'desc' },
@@ -35,8 +35,8 @@ router.get('/', async (req, res, next) => {
       prisma.exchangeOffice.findMany({
         where: {
           OR: [
-            { name: { contains: q, mode: 'insensitive' } },
-            { city: { contains: q, mode: 'insensitive' } },
+            { name: { contains: q } },
+            { city: { contains: q } },
           ],
         },
         take: 10,
@@ -44,8 +44,8 @@ router.get('/', async (req, res, next) => {
       prisma.economicEvent.findMany({
         where: {
           OR: [
-            { title: { contains: q, mode: 'insensitive' } },
-            { country: { contains: q, mode: 'insensitive' } },
+            { title: { contains: q } },
+            { country: { contains: q } },
           ],
         },
         orderBy: { eventDate: 'asc' },
