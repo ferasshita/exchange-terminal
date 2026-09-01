@@ -87,3 +87,46 @@ export interface PaginatedResponse<T> {
   page: number;
   pageSize: number;
 }
+
+export interface ForecastPrediction {
+  id: string;
+  runId: string;
+  pair: string;
+  horizonHours: number;
+  pointForecast: string;
+  confidenceLow: string;
+  confidenceHigh: string;
+  confidenceLabel: string;
+  currentRate?: string;
+  predictionFor: string;
+  isPublished: boolean;
+  createdAt: string;
+}
+
+export interface WhatsAppIntegration {
+  id: string;
+  userId: string;
+  name: string;
+  businessAccountId: string;
+  phoneNumberId: string;
+  encryptedAccessToken: string;
+  verifyToken: string;
+  status: 'DISCONNECTED' | 'CONNECTED' | 'FAILED' | 'WAITING';
+  lastSync?: string;
+  sources?: WhatsAppSource[];
+}
+
+export interface WhatsAppSource {
+  id: string;
+  integrationId: string;
+  name: string;
+  description?: string;
+  type: 'EXCHANGE_RATES' | 'NEWS' | 'GOLD_PRICES' | 'ECONOMIC_EVENTS';
+  inviteCode?: string;
+  channelJid?: string;
+  active: boolean;
+  syncEnabled: boolean;
+  priority: number;
+  lastSyncAt?: string;
+  lastError?: string;
+}

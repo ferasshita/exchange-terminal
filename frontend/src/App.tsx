@@ -21,12 +21,14 @@ import {
   SettingsPage,
 } from './pages/DashboardPages';
 import { ForgotPasswordPage, LoginPage, RegisterPage } from './pages/AuthPages';
+import { IngestionPage, PublicDashboardPage } from './pages/ForecastingPages';
 
 const App = () => (
   <Routes>
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+    <Route path="/public-dashboard" element={<PublicDashboardPage />} />
 
     <Route element={<ProtectedRoute />}>
       <Route element={<AppShell />}>
@@ -38,6 +40,7 @@ const App = () => (
         <Route path="/economic-calendar" element={<EconomicCalendarPage />} />
         <Route path="/exchange-offices" element={<ExchangeOfficesPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/ingestion" element={<IngestionPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
     </Route>

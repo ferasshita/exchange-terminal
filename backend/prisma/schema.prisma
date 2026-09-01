@@ -61,6 +61,26 @@ enum WhatsAppParseStatus {
   REJECTED
 }
 
+enum ImportSourceType {
+  CSV
+  TXT
+  DATABASE
+  WHATSAPP_REALTIME
+}
+
+enum ImportStatus {
+  PENDING
+  PROCESSED
+  FAILED
+}
+
+enum ForecastRunStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
 model User {
   id           String   @id @default(cuid())
   fullName     String
@@ -194,9 +214,14 @@ model WhatsAppSource {
   integrationId String
   name          String
   description   String?
+  inviteCode    String?
+  channelJid    String?
   type          WhatsAppSourceType
   active        Boolean            @default(true)
+  syncEnabled   Boolean            @default(true)
   priority      Int                @default(5)
+  lastSyncAt    DateTime?
+  lastError     String?
   createdAt     DateTime           @default(now())
 
   integration WhatsAppIntegration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
@@ -242,4 +267,48 @@ model ProcessingLog {
 
   @@index([messageId, createdAt])
   @@map("processing_logs")
+}
+
+model ImportedFile {
+  id          String           @id @default(cuid())
+  fileName    String
+  sourceType  ImportSourceType
+  contentType String?
+  status      ImportStatus     @default(PENDING)
+  recordsIn   Int              @default(0)
+  recordsOut  Int              @default(0)
+  error       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model ForecastRun {
+  id           String            @id @default(cuid())
+  status       ForecastRunStatus @default(PENDING)
+  sourceTypes  Json?
+  modelVersion String?
+  startedAt    DateTime?
+  completedAt  DateTime?
+  errorMessage String?
+  createdAt    DateTime          @default(now())
+  predictions  ForecastPrediction[]
+}
+
+model ForecastPrediction {
+  id               String      @id @default(cuid())
+  runId            String
+  pair             String
+  horizonHours     Int
+  pointForecast    Decimal
+  confidenceLow    Decimal
+  confidenceHigh   Decimal
+  confidenceLabel  String
+  currentRate      Decimal?
+  predictionFor    DateTime
+  isPublished      Boolean     @default(false)
+  createdAt        DateTime    @default(now())
+
+  run ForecastRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([pair, predictionFor])
 }
