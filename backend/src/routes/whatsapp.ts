@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { WhatsAppIntegrationStatus, WhatsAppSourceType } from '@prisma/client';
+import { WhatsAppIntegrationStatus } from '@prisma/client';
 import { z } from 'zod';
 
 import { prisma } from '../lib/prisma';
@@ -19,7 +19,7 @@ const integrationSchema = z.object({
 const sourceSchema = z.object({
   name: z.string().min(2),
   description: z.string().optional(),
-  type: z.nativeEnum(WhatsAppSourceType),
+  type: z.enum(['EXCHANGE_RATES', 'NEWS', 'GOLD_PRICES', 'ECONOMIC_EVENTS']),
   inviteCode: z.string().optional(),
   channelJid: z.string().optional(),
   priority: z.coerce.number().int().min(1).max(10).optional(),
