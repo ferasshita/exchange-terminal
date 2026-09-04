@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: forecast-service
+    env: docker
+    region: frankfurt
+    plan: free
+    autoDeploy: true
+    # Point Render to the Dockerfile inside the monorepo
+    dockerfilePath: forecast_service/Dockerfile
+    # Optional health check path for Render dashboard
+    healthCheckPath: /health
+    # Environment variables for the container
+    envVars:
+      - key: PORT
+        value: 8000

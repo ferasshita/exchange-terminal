@@ -1,0 +1,41 @@
+# Global Docker build context excludes for this monorepo
+
+# VCS
+.git/
+.gitignore
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.venv/
+venv/
+ENV/
+
+# Node modules and build artifacts
+node_modules/
+**/node_modules/
+**/dist/
+**/build/
+
+# OS/IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Data and notebooks
+*.ipynb
+*.csv
+*.parquet
+data/
+
+# Test caches
+.pytest_cache/
+.coverage
+
+# Large project subdirs not needed for forecast_service image
+backend/
+frontend/

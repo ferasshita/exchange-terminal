@@ -1,0 +1,39 @@
+# Docker build context excludes for forecast_service
+# Keep image lean and builds fast
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.venv/
+venv/
+ENV/
+
+# Tests and local tooling
+.tests/
+tests/
+.coverage
+.pytest_cache/
+
+# VCS
+.git/
+.gitignore
+
+# OS/IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Node/other monorepo directories (not needed for this service)
+backend/
+frontend/
+node_modules/
+
+# Data and notebooks
+*.ipynb
+*.csv
+*.parquet
+data/
